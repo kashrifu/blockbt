@@ -6,9 +6,11 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/status-MVP-orange.svg)](https://github.com/yourusername/blockbt)
+[![Status](https://img.shields.io/badge/status-MVP-orange.svg)](https://github.com/kashrifu/blockbt)
 
-📖 **[Read the Technical Whitepaper](WHITEPAPER.md)** for full product vision, architecture, and roadmap.
+🌐 **[Visit the Website](https://kashrifu.github.io/blockbt/)** | 📖 **[Read the Technical Whitepaper](WHITEPAPER.md)** | 📚 **[Technical Documentation](TECHNICAL_DOCS.md)**
+
+For full product vision, architecture, and roadmap.
 
 ---
 
@@ -149,7 +151,7 @@ User: bbt run --select fees_model --prove --target eth_sol
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/blockbt.git
+git clone https://github.com/kashrifu/blockbt.git
 cd blockbt
 pip install -e .
 ```
@@ -168,65 +170,61 @@ All dependencies are automatically installed:
 
 ## Quick Start
 
-### 1. Initialize a Project
+### 1. Install BlockBT
 
 ```bash
-bbt init --adapter ethereum
+git clone https://github.com/kashrifu/blockbt.git
+cd blockbt
+pip install -e .
 ```
 
-### 2. Configure Your Project
+### 2. Set Environment Variables
 
-Create `blockbt_project.yml`:
+```bash
+# Windows CMD
+set INFURA_KEY=your_infura_key
+set SOLANA_RPC=https://api.mainnet-beta.solana.com
 
-```yaml
-name: my_blockchain_project
-version: 1.0.0
-profile: default
-
-profile:
-  default:
-    outputs:
-      default:
-        type: ethereum
-        rpc_url: https://mainnet.infura.io/v3/YOUR_KEY
-    target: default
+# Linux/Mac
+export INFURA_KEY=your_infura_key
+export SOLANA_RPC=https://api.mainnet-beta.solana.com
 ```
 
-### 3. Define Sources
+### 3. Run a Demo Model
 
-Create `sources.yml`:
+```bash
+# Cross-chain market share
+bbt run --select cross_chain_market_share --target eth_sol
 
-```yaml
-sources:
-  - name: ethereum
-    tables:
-      - name: transactions
-      - name: logs
+# Ethereum daily fees
+bbt run --select eth_daily_fees --target eth
+
+# Cross-chain 7-day trends
+bbt run --select cross_chain_7d_trends --target eth_sol
 ```
 
-### 4. Create Models
+### 4. Create Your Own Model
 
-Create SQL models in `models/`:
+Create a SQL file in `models/`:
 
 ```sql
--- models/defi_fees.sql
-{{ config(materialized='table') }}
-
+-- models/my_model.sql
 SELECT 
-    DATE_TRUNC('day', block_timestamp) as date,
-    SUM(gas_fee) as total_fees
-FROM {{ source('ethereum', 'transactions') }}
-WHERE block_number > {{ var('start_block', 18000000) }}
+    DATE_TRUNC('hour', block_time) as hour,
+    SUM(gas_used * gas_price / 1e18 * eth_usd_price) as total_fees_usd
+FROM {{ source('ethereum', 'swaps') }}
+WHERE block_time >= NOW() - INTERVAL '24 hours'
 GROUP BY 1
+ORDER BY 1 DESC
 ```
 
-### 5. Run Models
+Then run it:
 
 ```bash
-bbt run                    # Run all models
-bbt run --select defi_fees # Run specific model
-bbt compile                # See compiled SQL
+bbt run --select my_model --target eth
 ```
+
+See the [Technical Documentation](TECHNICAL_DOCS.md) for more details.
 
 ## CLI Commands
 
@@ -272,33 +270,44 @@ bbt init --adapter solana
 ```
 blockbt/
 ├── bbt/                         # Main package
-│   ├── adapters/                # Chain adapters (ethereum, solana, etc.)
-│   ├── macros/                  # Reusable SQL macros
-│   └── cli.py                   # Command-line interface
-├── models/                      # Your SQL models
+│   ├── adapters/                # Chain adapters (ethereum, solana, polymarket, prices)
+│   ├── cli.py                   # Command-line interface
+│   ├── executor.py              # SQL execution & DAG resolution
+│   ├── fetcher.py               # Data ingestion
+│   ├── prover.py                # ZK proof generation
+│   └── state.py                 # Incremental state management
+├── models/                      # Your SQL models (15+ demo models)
 ├── tests/                       # Test files
+├── website/                     # Website files (HTML/CSS/JS)
 ├── setup.py                     # Package configuration
 ├── requirements.txt             # Python dependencies
-├── blockbt_project.yml          # Project configuration
-└── sources.yml                  # Source definitions
+├── TECHNICAL_DOCS.md            # Technical documentation
+├── WHITEPAPER.md                # Product whitepaper
+└── README.md                    # This file
 ```
 
 ## MVP Status (November 2025)
 
-🚧 **Current Version: 0.1.0-mvp**
+🚧 **Current Version: 0.1.0**
 
 The MVP is a Python CLI validating DeFi use cases:
 
 - ✅ ETH/Sol ingestion via adapters
-- ✅ SQL models with dbt-like syntax
+- ✅ SQL models with dbt-like syntax (`{{ ref() }}`, `{{ source() }}`, `{{ config() }}`)
 - ✅ Source definitions (YAML)
-- ✅ Cross-chain joins
+- ✅ Cross-chain joins (Ethereum + Solana)
+- ✅ DAG resolution with NetworkX
+- ✅ Incremental models with hash-based state tracking
+- ✅ Real-time price fetching (ETH/USD, SOL/USD per block)
 - ✅ Mock ZK proofs (infrastructure ready)
-- ✅ JSON outputs
+- ✅ JSON outputs with metadata
 - ✅ Dune push stub
-- ✅ Basic CLI commands
+- ✅ Basic CLI commands (`run`, `compile`, `test`, `init`)
+- ✅ Comprehensive demo models (15+ examples)
 
-**Demo**: Cross-fees pipeline (`bbt run --target eth_sol`)
+**Demo**: Cross-chain market share (`bbt run --select cross_chain_market_share --target eth_sol`)
+
+**Website**: [https://kashrifu.github.io/blockbt/](https://kashrifu.github.io/blockbt/)
 
 ## Roadmap
 
@@ -358,8 +367,9 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for detai
 
 ## Contact
 
+- **Website**: [https://kashrifu.github.io/blockbt/](https://kashrifu.github.io/blockbt/)
+- **GitHub**: [kashrifu/blockbt](https://github.com/kashrifu/blockbt)
 - **Email**: hello@blockbt.com
-- **GitHub**: [yourusername/blockbt](https://github.com/yourusername/blockbt)
 - **Discord**: [Join our community](https://discord.gg/blockbt)
 
 ---
