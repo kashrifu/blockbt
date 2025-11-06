@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BlockBT: dbt-inspired ELT for blockchains. Transform chains like tables with live RPC ingestion, cross-chain SQL, and verifiable analytics.">
+    <title>BlockBT - Transform Chains Like Tables</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">BBT</span>
+                <span class="brand-name">BlockBT</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#use-cases">Use Cases</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#examples">Examples</a>
+                <a href="#docs">Docs</a>
+                <a href="https://github.com/yourusername/blockbt" target="_blank" class="btn-secondary">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Transform Chains<br>
+                    <span class="gradient-text">Like Tables</span>
+                </h1>
+                <p class="hero-subtitle">
+                    BlockBT rewrites dbt-core for blockchain-native ELT. Live RPC ingestion, 
+                    cross-chain SQL transforms, and verifiable analytics—no warehouses needed.
+                </p>
+                <div class="hero-cta">
+                    <a href="#getting-started" class="btn-primary">Get Started</a>
+                    <a href="https://github.com/yourusername/blockbt" target="_blank" class="btn-outline">View on GitHub</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">3+</div>
+                        <div class="stat-label">Chains Supported</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">10+</div>
+                        <div class="stat-label">Demo Models</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Open Source</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-code">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Cross-Chain Analytics</span>
+                        <span class="code-lang">SQL</span>
+                    </div>
+                    <pre><code>-- models/cross_chain_market_share.sql
+SELECT
+  chain,
+  sum(gas_used * gas_price / 1e18 * eth_usd_price) 
+    AS total_volume_usd
+FROM (
+  SELECT 'ethereum' AS chain, gas_used, gas_price, eth_usd_price
+  FROM {{ source('ethereum', 'swaps') }}
+  UNION ALL
+  SELECT 'solana' AS chain, gas_used, gas_price, sol_usd_price
+  FROM {{ source('solana', 'swaps') }}
+)
+GROUP BY chain;</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <p class="section-subtitle">Built for blockchain-native analytics</p>
+            
+            <div class="features-grid highlight-features">
+                <div class="feature-card highlight-card">
+                    <div class="feature-icon">🧱</div>
+                    <h3>Chain-Native Ingestion</h3>
+                    <p>Fetch live data from 100+ chains using lightweight adapters. Works with any RPC or Subgraph endpoint.</p>
+                </div>
+                
+                <div class="feature-card highlight-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Canonical Schema</h3>
+                    <p>Unified model for swaps, transfers, liquidity — write one query, run across all chains.</p>
+                </div>
+                
+                <div class="feature-card highlight-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Atomic Reorg Handling</h3>
+                    <p>BlockBT's Block-Hash Log detects and reverses reorg effects automatically.</p>
+                </div>
+                
+                <div class="feature-card highlight-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>High-Throughput Execution</h3>
+                    <p>Powered by Polars + DuckDB — vectorized SQL at 10× typical ETL speed.</p>
+                </div>
+                
+                <div class="feature-card highlight-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Cross-Chain SQL Joins</h3>
+                    <p>Compare Ethereum fees, Solana swaps, and Base gas costs — in a single query.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="use-cases">
+        <div class="container">
+            <h2 class="section-title">Who Uses BlockBT?</h2>
+            <p class="section-subtitle">Real-world use cases for Web3 analytics</p>
+            
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏦</div>
+                    <h3>DeFi Protocols</h3>
+                    <p>Track fees, TVL, and swap volumes across chains without mirrors.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">🗳️</div>
+                    <h3>DAOs & Treasuries</h3>
+                    <p>Generate transparent, on-chain accounting dashboards.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">💼</div>
+                    <h3>CEX / Institutions</h3>
+                    <p>Build proof-of-reserve or compliance reports from live data.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">📈</div>
+                    <h3>Quant Funds</h3>
+                    <p>Stream live on-chain signals for high-frequency trading.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">🔍</div>
+                    <h3>Degens / Analysts</h3>
+                    <p>Build Dune-style dashboards that refresh every minute — no warehouse.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">From SQL to insights in seconds</p>
+            
+            <div class="workflow">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Write SQL Models</h3>
+                        <p>Define transformations using familiar dbt syntax with <code>{{ source() }}</code> and <code>{{ ref() }}</code> macros.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Live Data Ingestion</h3>
+                        <p>BlockBT fetches data directly from RPC endpoints. Ethereum via Infura, Solana via public RPC, and more.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>DAG Resolution</h3>
+                        <p>Automatically resolves dependencies and executes models in the correct order. Parallel execution coming soon.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>SQL Execution</h3>
+                        <p>DuckDB executes your SQL queries on in-memory DataFrames. Fast analytical queries with cross-chain joins.</p>
+                    </div>
+                </div>
+                
+                <div class="workflow-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>JSON Output</h3>
+                        <p>Get results as JSON with embedded metadata. Optional proof generation and push to Dune Analytics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Section -->
+    <section id="examples" class="examples">
+        <div class="container">
+            <h2 class="section-title">Example Models</h2>
+            <p class="section-subtitle">Real-world analytics for Web3</p>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h3>Cross-Chain Market Share</h3>
+                    <p>Compare Ethereum vs Solana volume and transaction market share</p>
+                    <div class="example-code">
+                        <code>bbt run --select cross_chain_market_share --target eth_sol</code>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <h3>Daily Fee Trends</h3>
+                    <p>Track transaction fees across chains with 7-day rolling averages</p>
+                    <div class="example-code">
+                        <code>bbt run --select cross_chain_7d_trends --target eth_sol</code>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <h3>Real-Time Activity</h3>
+                    <p>Monitor last 30 minutes of blockchain activity per minute</p>
+                    <div class="example-code">
+                        <code>bbt run --select cross_chain_recent_30min --target eth_sol</code>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <h3>Incremental Processing</h3>
+                    <p>Process only new blocks with hash-based state tracking</p>
+                    <div class="example-code">
+                        <code>bbt run --select eth_incremental_fees --target eth</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section id="getting-started" class="getting-started">
+        <div class="container">
+            <h2 class="section-title">Get Started in 5 Minutes</h2>
+            
+            <div class="steps">
+                <div class="step-box">
+                    <div class="step-header">
+                        <span class="step-badge">Step 1</span>
+                        <h3>Install BlockBT</h3>
+                    </div>
+                    <div class="step-body">
+                        <pre><code>git clone https://github.com/yourusername/blockbt.git
+cd blockbt
+pip install -e .</code></pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-header">
+                        <span class="step-badge">Step 2</span>
+                        <h3>Set Your RPC Keys</h3>
+                    </div>
+                    <div class="step-body">
+                        <pre><code># Windows CMD
+set INFURA_KEY=your_infura_key
+set SOLANA_API_KEY=your_solana_key
+
+# Or use public RPCs (no key needed for Solana)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-header">
+                        <span class="step-badge">Step 3</span>
+                        <h3>Run Your First Model</h3>
+                    </div>
+                    <div class="step-body">
+                        <pre><code>bbt run --select cross_chain_market_share --target eth_sol --prove</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h3>Ready to transform blockchain data?</h3>
+                <div class="cta-buttons">
+                    <a href="https://github.com/yourusername/blockbt" target="_blank" class="btn-primary">View on GitHub</a>
+                    <a href="#docs" class="btn-outline">Read Documentation</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Details -->
+    <section id="docs" class="docs">
+        <div class="container">
+            <h2 class="section-title">Technical Architecture</h2>
+            <p class="section-subtitle">Built for performance and reliability</p>
+            
+            <div class="architecture">
+                <div class="arch-layer">
+                    <h3>Layer 1: CLI</h3>
+                    <p>Click-based command interface. Parse arguments, validate inputs, orchestrate execution.</p>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3>Layer 2: Config</h3>
+                    <p>YAML-based configuration. Source definitions, project settings, variable substitution.</p>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3>Layer 3: Ingestion</h3>
+                    <p>Modular RPC adapters. Ethereum (web3.py), Solana (JSON-RPC), Polymarket (REST). Hash-based state tracking.</p>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3>Layer 4: Transformation</h3>
+                    <p>DAG resolution (NetworkX), macro resolution, DuckDB SQL execution. Cross-chain joins.</p>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3>Layer 5: Verification</h3>
+                    <p>Mock proofs (MVP). Real ZK proofs coming in Beta (SP1/RISC0).</p>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3>Layer 6: Output</h3>
+                    <p>JSON core format. Optional pushes to Dune Analytics, Snowflake, IPFS, or on-chain contracts.</p>
+                </div>
+            </div>
+            
+            <div class="docs-links">
+                <a href="TECHNICAL_DOCS.md" class="doc-link">📖 Full Technical Documentation</a>
+                <a href="WHITEPAPER.md" class="doc-link">📄 Whitepaper</a>
+                <a href="README.md" class="doc-link">📚 README</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo">BBT</span>
+                    <span class="brand-name">BlockBT</span>
+                    <p>Transform chains like tables</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#features">Features</a>
+                        <a href="#use-cases">Use Cases</a>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#examples">Examples</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="TECHNICAL_DOCS.md">Technical Docs</a>
+                        <a href="WHITEPAPER.md">Whitepaper</a>
+                        <a href="README.md">README</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <a href="https://github.com/yourusername/blockbt" target="_blank">GitHub</a>
+                        <a href="https://discord.gg/blockbt" target="_blank">Discord</a>
+                        <a href="mailto:hello@blockbt.com">Contact</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 BlockBT. Licensed under Apache 2.0.</p>
+                <p class="footer-tagline">"Transforming blockchain data, one SQL model at a time."</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
